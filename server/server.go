@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -36,7 +35,8 @@ func loadPage(title string) (*Page, error) {
 // is the path component of the request URL, trailing 1: means create a subslice of Path from the
 // first character to the end
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi There, I love %s!", r.URL.Path[1:])
+	title := r.URL.Path[1:]
+	http.Redirect(w, r, "/view/"+title, http.StatusFound)
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +71,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	t, err := template.ParseFiles(tmpl + ".hmtl")
+	t, err := template.ParseFiles(tmpl + ".html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
