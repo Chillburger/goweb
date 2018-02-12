@@ -14,14 +14,14 @@ type Page struct {
 // this will save the body to a text file, using the page Title as the file Name
 // return an error value because that is the return value of WriteFile
 func (p *Page) save() error {
-	filename := p.Title + ".txt"
+	filename := "saved\\" + p.Title + ".txt"
 	return ioutil.WriteFile(filename, p.Body, 0600)
 }
 
 // constructs the filename from the title parameter, reads the file's contents into a new variables
 // body and returns a new Page Literal
 func loadPage(title string) (*Page, error) {
-	filename := title + ".txt"
+	filename := "saved\\" + title + ".txt"
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	t, err := template.ParseFiles(tmpl + ".html")
+	t, err := template.ParseFiles("templates\\" + tmpl + ".html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
